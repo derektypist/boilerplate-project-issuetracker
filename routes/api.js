@@ -10,9 +10,9 @@
 
 var expect = require('chai').expect;
 var MongoClient = require('mongodb');
-var ObjectId = require('mongodb').ObjectID;
+var mongoose = require('mongoose');
 
-const CONNECTION_STRING = process.env.DB; //MongoClient.connect(CONNECTION_STRING, function(err, db) {});
+let uri = process.env.DB; 
 
 module.exports = function (app) {
 
@@ -20,7 +20,13 @@ module.exports = function (app) {
   
     .get(function (req, res){
       var project = req.params.project;
-      
+      let filterObject = Object.assign(req.query);
+      filterObject['project'] = project;
+      Issue.find(filterObject, (error, arrayOfResults) => {
+        if(!error && arrayOfResults) {
+          return res.json(arrayOfResults);
+        }
+      });
     })
     
     .post(function (req, res){
