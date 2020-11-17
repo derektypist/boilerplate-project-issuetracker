@@ -173,7 +173,13 @@ suite('Functional Tests', function() {
     suite('DELETE /api/issues/{project} => text', function() {
       
       test('No _id', function(done) {
-        
+        chai.request(server)
+        .delete('/api/issues/test')
+        .send({})
+        .end(function(err,res) {
+          assert.equal(res.body, "id error");
+          done();
+        });
       });
       
       test('Valid _id', function(done) {
